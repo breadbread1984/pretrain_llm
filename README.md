@@ -37,7 +37,13 @@ python3 tools/preprocess_data.py --input <path/to/json> --output-prefix <prefix/
 
 ```shell
 cd <path/to/Megatron-LLaMA/root>
-torchrun pretrain_llama.py \
+torchrun \
+--nproc_per_node <gpu/per/node> \
+--nnodes 1 \
+--node_rank 0 \
+--master_addr localhost \
+--master_port 6000 \
+pretrain_llama.py \
 --num-layers 32 \
 --hidden-size 4096 \
 --num-attention-heads 32 \
@@ -61,5 +67,9 @@ torchrun pretrain_llama.py \
 --eval-interval 1000 \
 --eval-iters 10 \
 --save llama2_ckpt \
---load llama2_ckpt
+--load llama2_ckpt \
+--distributed-backend nccl \
+--tensor-model-parallel-size 4 \
+--pipeline-model-parallel-size 2 \
+--sequence-parallel
 ```
