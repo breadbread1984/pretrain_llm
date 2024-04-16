@@ -23,7 +23,7 @@ def main(unused_argv):
                         '.pdf': UnstructuredPDFLoader}
         loader = loader_types[ext](join(root, f), mode = "single", strategy = "fast")
         for s in loader.load():
-          output.write('%s\n' % json.dumps({'text': s}))
+          output.write('%s\n' % json.dumps({'text': s.page_content, 'source': s.metadata['source'], 'type': s.type}))
 
 if __name__ == "__main__":
   add_options()
