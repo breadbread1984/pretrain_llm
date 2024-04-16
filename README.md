@@ -69,7 +69,9 @@ pretrain_llama.py \
 --save llama2_ckpt \
 --load llama2_ckpt \
 --distributed-backend nccl \
---tensor-model-parallel-size 4 \
---pipeline-model-parallel-size 2 \
+--tensor-model-parallel-size <tensor/parallism/number> \
+--pipeline-model-parallel-size <pipeline/parallism/number> \
 --sequence-parallel
 ```
+
+**NOTE**: <gpu/per/node> must equal to <tensor/parallism/number> * <pipeline/parallism/number>
