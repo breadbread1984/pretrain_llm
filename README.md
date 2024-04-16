@@ -17,5 +17,6 @@ python3 download_arxiv.py --input_txt <path/to/query/key/words> --output_dir <di
 generate dataset from papers with the following command
 
 ```shell
-python3 
+python3 create_dataset.py --input_dir <directory/to/papers> --output_json <path/to/json>
 ```
+
