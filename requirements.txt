@@ -14,4 +14,4 @@ layoutparser
 onnxruntime
 pikepdf
 sentence-transformers
-
+pillow_heif
