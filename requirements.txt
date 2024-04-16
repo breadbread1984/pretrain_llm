@@ -1,0 +1,17 @@
+tqdm
+absl-py
+torch
+transformers
+langchain
+langchain-community
+unstructured
+pdf2image
+pdfminer
+pdfminer.six
+opencv-python
+unstructured_inference
+layoutparser
+onnxruntime
+pikepdf
+sentence-transformers
+
