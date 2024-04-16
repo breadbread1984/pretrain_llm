@@ -6,7 +6,7 @@ this project is a guideline and relatived tools for pretraining LLM.
 
 ## download and preprocess ebooks and papers
 
-add query key words into a file. one line per query. **query_words.txt**
+add query key words into a file. one line per query. take **query_words.txt** as an example.
 
 query and download the papers with the following command
 
