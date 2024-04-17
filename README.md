@@ -104,3 +104,8 @@ create dataset with the following command
 python3 create_dataset.py --input_dir <path/to/raw/dataset/directory> --output_json <path/to/output/dataset> --target sft --format (conv|instr)
 ```
 
+supervised finetuning with the following command
+
+```shell
+python3 sft.py --pretrained_ckpt <path/to/huggingface/llama2/checkpoint> --sft_ckpt <path/to/finetuned/huggingface/checkpoint> --dataset <path/to/dataset>
+```
