@@ -2,6 +2,7 @@ tqdm
 absl-py
 torch
 transformers
+datasets
 langchain
 langchain-community
 unstructured
