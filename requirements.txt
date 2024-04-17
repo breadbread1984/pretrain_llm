@@ -15,3 +15,5 @@ onnxruntime
 pikepdf
 sentence-transformers
 pillow_heif
+trl
+peft
