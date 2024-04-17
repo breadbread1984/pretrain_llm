@@ -15,6 +15,8 @@ def add_options():
   flags.DEFINE_string('dataset', default = None, help = 'path to dataset')
   flags.DEFINE_enum('device', default = 'cuda', enum_values = {'cpu', 'cuda'}, help = 'device to use')
   flags.DEFINE_float('lr', default = '2e-4', help = 'learning rate')
+  flags.DEFINE_integer('epoch', default = 1, help = 'epochs')
+  flags.DEFINE_integer('max_seq_length', default = 4096, help = 'max sequence length')
 
 def main(unused_argv):
   dataset = load_dataset('json', data_files = FLAGS.dataset, split = "train")
@@ -28,6 +30,20 @@ def main(unused_argv):
     learning_rate = FLAGS.lr,
     warmup_ratio = 0.1,
     lr_scheduler_type = "linear",
-    num_train_epochs = 1,
+    num_train_epochs = FLAGS.epoch,
     save_strategy = "epoch")
-  
+  lora_peft_config = LoraConfig(task_type = "CAUSAL_LM", r = 16, lora_alpha = 32, lora_dropout = 0.05)
+  trainer = SFTTrainer(
+    model = model,
+    train_dataset = dataset,
+    max_seq_length = FLAGS.max_seq_length,
+    tokenizer = tokenizer,
+    args = model_training_args,
+    packing = True,
+    peft_config = lora_peft_config)
+  trainer.train()
+
+if __name__ == "__main__":
+  add_options()
+  app.run(main)
+
