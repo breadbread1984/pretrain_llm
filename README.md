@@ -23,7 +23,7 @@ python3 download_arxiv.py --input_txt <path/to/query/key/words> --output_dir <di
 generate dataset from papers with the following command
 
 ```shell
-python3 create_dataset.py --input_dir <directory/to/papers> --output_json <path/to/json>
+python3 create_dataset.py --input_dir <directory/to/papers> --output_json <path/to/json> --target pretrain
 ```
 
 download [Megatron-LlaMA](https://github.com/alibaba/Megatron-LLaMA) and preprocess the generated dataset with [**preprocess_data.py**](https://github.com/alibaba/Megatron-LLaMA/blob/main/tools/preprocess_data.py).
@@ -81,4 +81,8 @@ python3 tools/checkpoint_conversion/llama_checkpoint_conversion.py \
 
 ## supervised finetuning
 
+create dataset with the following command
 
+```shell
+python3 create_dataset.py --input_dir <path/to/raw/dataset/directory> --output_json <path/to/output/dataset> --target sft --format (conv|instr)
+```
