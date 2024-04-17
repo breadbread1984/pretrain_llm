@@ -7,7 +7,7 @@ this project is a guideline and relatived tools for pretraining LLM.
 ## install prerequisite packages
 
 ```shell
-python3 -m pip install flash-attn
+python3 -m pip install torch flash-attn
 ```
 
 ## download and preprocess ebooks and papers
@@ -33,45 +33,52 @@ cd <path/to/Megatron-LLaMA/root>
 python3 tools/preprocess_data.py --input <path/to/json> --output-prefix <prefix/for/output/bin/file> --tokenizer-type PretrainedFromHF --tokenizer-name-or-path <huggingface/model/id> --split-sentences
 ```
 
-## pretrain LlaMA
+## pretrain LlaMA2 7b
+
+download pretrained llama2 7b checkpoint
+
+```shell
+git clone https://huggingface.co/meta-llama/Llama-2-7b-hf
+cd Llama-2-7b-hf
+git lfs pull
+```
+
+convert huggingface checkpoint to megatron checkpoint
 
 ```shell
 cd <path/to/Megatron-LLaMA/root>
-torchrun \
---nproc_per_node <gpu/per/node> \
---nnodes 1 \
---node_rank 0 \
---master_addr localhost \
---master_port 6000 \
-pretrain_llama.py \
---num-layers 32 \
---hidden-size 4096 \
---num-attention-heads 32 \
---seq-length 4096 \
---max-position-embeddings 4096 \
---micro-batch-size 4 \
---global-batch-size 8 \
---lr 0.00015 \
---train-iters 500000 \
---lr-decay-iters 320000 \
---lr-decay-style cosine \
---min-lr 1.0e-5 \
---weight-decay 1e-2 \
---lr-warmup-fraction .01 \
---clip-grad 1.0 \
---use-flash-attn \
---fp16 \
---data-path <prefix/for/dataset/files> \
---log-interval 100 \
---save-interval 10000 \
---eval-interval 1000 \
---eval-iters 10 \
---save llama2_ckpt \
---load llama2_ckpt \
---distributed-backend nccl \
---tensor-model-parallel-size <tensor/parallism/number> \
---pipeline-model-parallel-size <pipeline/parallism/number> \
---sequence-parallel
+python3 tools/checkpoint_conversion/llama_checkpoint_conversion.py \
+--load_path <path/to/huggingface/llama2/checkpoint> \
+--save_path <path/to/megatron/llama2/checkpoint> \
+--target_tensor_model_parallel_size 2 \
+--target_pipeline_model_parallel_size 1 \
+--target_data_parallel_size 16 \
+--target_params_dtype "fp16" \
+--make_vocab_size_divisible_by 1 \
+--print-checkpoint-structure \
+--megatron-path <path/to/Megatron-LLaMA/root>
 ```
 
-**NOTE**: <gpu/per/node> must equal to <tensor/parallism/number> * <pipeline/parallism/number>
+pretrain on existing checkpoint
+
+```shell
+bash pretrain.sh
+```
+
+convert megatron checkpoint to huggingface checkpoint
+
+```shell
+cd <path/to/Megatron-LLaMA/root>
+python3 tools/checkpoint_conversion/llama_checkpoint_conversion.py \
+--convert_checkpoint_from_megatron_to_transformers \
+--load_path <path/to/megatron/llama2/checkpoint> \
+--save_path <path/to/huggingface/llama2/checkpoint> \
+--target_params_dtype "fp16" \
+--make_vocab_size_divisible_by 1 \
+--print-checkpoint-structure \
+--megatron-path <path/to/Megatron-LLaMA/root>
+```
+
+## supervised finetuning
+
+
