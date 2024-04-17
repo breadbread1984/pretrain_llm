@@ -81,8 +81,26 @@ python3 tools/checkpoint_conversion/llama_checkpoint_conversion.py \
 
 ## supervised finetuning
 
+prepare SFT dataset under a directory. every sample should be put in a single file.
+
+if the sample is a conversation sample, it should be formatted as
+
+```
+<prompt>
+<user input>
+<assistant response>
+```
+
+if the sample is a instruction sample, it should be formatted as
+
+```
+<prompt>
+<response>
+```
+
 create dataset with the following command
 
 ```shell
 python3 create_dataset.py --input_dir <path/to/raw/dataset/directory> --output_json <path/to/output/dataset> --target sft --format (conv|instr)
 ```
+
