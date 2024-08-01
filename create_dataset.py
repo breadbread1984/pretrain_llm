@@ -38,7 +38,7 @@ def main(unused_argv):
             if FLAGS.format == 'conv':
               assert len(lines) == 3
               roles = ['system', 'user', 'assistant']
-              sample = {"message": [{"role": role, "content": line} for role, line in zip(roles, lines)]}
+              sample = {"messages": [{"role": role, "content": line} for role, line in zip(roles, lines)]}
               output.write(json.dumps(sample) + '\n')
             elif FLAGS.format == 'instr':
               assert len(lines) == 2
